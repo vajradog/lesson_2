@@ -21,45 +21,45 @@ loop do
     end
   end
 
-  computer_choice = %w(r p c s l).sample
+  computer_choice = valid_choice.sample
 
   # Scissors cuts Paper covers Rock crushes Lizard poisons Spock
   # Spock smashes Scissors decapitates Lizard eats Paper
   # Paper disproves Spock vaporizes Rock crushes Scissors
 
-  if user_choice == "c" && computer_choice == "p" ||
-     user_choice == "p" && computer_choice == "r" ||
-     user_choice == "r" && computer_choice == "l" ||
-     user_choice == "l" && computer_choice == "s" ||
-     user_choice == "s" && computer_choice == "c" ||
-     user_choice == "c" && computer_choice == "l" ||
-     user_choice == "l" && computer_choice == "p" ||
-     user_choice == "p" && computer_choice == "s" ||
-     user_choice == "s" && computer_choice == "r"
-    prompt("You win")
-    user_score = user_score += 1
-  elsif computer_choice == "c" && user_choice == "p" ||
-        computer_choice == "p" && user_choice == "r" ||
-        computer_choice == "r" && user_choice == "l" ||
-        computer_choice == "l" && user_choice == "s" ||
-        computer_choice == "s" && user_choice == "c" ||
-        computer_choice == "c" && user_choice == "l" ||
-        computer_choice == "l" && user_choice == "p" ||
-        computer_choice == "p" && user_choice == "s" ||
-        computer_choice == "s" && user_choice == "r"
-    prompt("Computer wins")
-    computer_score = computer_score += 1
-  else
-    prompt("It's a tie")
+  def win?(first, second)
+    first == 'r' && %w(c l).include?(second) ||
+      first == 'p' && %w(r s).include?(second) ||
+      first == 'c' && %w(p l).include?(second) ||
+      first == 'l' && %w(s p).include?(second) ||
+      first == 's' && %w(r c).include?(second)
+  end
+
+  def display_result(user_choice, computer_choice)
+    if win?(user_choice, computer_choice)
+      prompt("You Win!!")
+    elsif win?(computer_choice, user_choice)
+      prompt("Computer Wins!")
+    else
+      prompt("It's a tie")
+    end
+  end
+
+  result = display_result(user_choice, computer_choice)
+  puts result
+
+  if win?(user_choice, computer_choice)
+    user_score += 1
+  elsif win?(computer_choice, user_choice)
+    computer_score += 1
   end
 
   prompt("you chose #{choice_full_word[user_choice]} and computer chose #{choice_full_word[computer_choice]}")
   prompt(" Your score is #{user_score} and Computer score is #{computer_score}")
 
-  if user_score == 5 || computer_score == 5
-    prompt("-------------------")
-    prompt("Final score is = You: #{user_score} and computer: #{computer_score}")
-    prompt("-------------------")
-    break
-  end
+  break if user_score == 5 || computer_score == 5
 end
+
+prompt("-------------------")
+prompt("Final score is = You: #{user_score} and computer: #{computer_score}")
+prompt("-------------------")

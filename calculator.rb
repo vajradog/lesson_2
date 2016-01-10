@@ -11,7 +11,7 @@ end
 require 'yaml'
 MESSAGES = YAML.load_file('calculator_messages.yml')
 
-def messages(message, lang='en')
+def messages(message, lang = 'en')
   MESSAGES[lang][message]
 end
 
@@ -21,30 +21,20 @@ def prompt(key)
 end
 
 def valid_number?(number)
-  integer?(number) || float?(number)
-end
-
-def integer?(number)
-  number.to_i.to_s == number
-end
-
-def float?(number)
-  number.to_f.to_s == number
+  number.to_i.to_s == number || number.to_f.to_s == number
 end
 
 def operation_to_message(op)
-  word = case op
-          when 'a'
-            prompt('add')
-          when 's'
-            prompt('subtract')
-          when 'm'
-            prompt('multiply')
-          when 'd'
-            prompt('divide')
-          end
-  prompt("separator")
-  word
+  case op
+  when 'a'
+    prompt('add')
+  when 's'
+    prompt('subtract')
+  when 'm'
+    prompt('multiply')
+  when 'd'
+    prompt('divide')
+  end
 end
 
 prompt("separator")
@@ -55,11 +45,8 @@ name = ""
 loop do
   prompt("name")
   name = Kernel.gets().chomp().capitalize
-  if name.empty?()
-    prompt('valid_name')
-  else
-    break
-  end
+  break unless name.empty?()
+  prompt('valid_name')
 end
 
 loop do
@@ -67,33 +54,24 @@ loop do
   loop do
     prompt("first_number")
     first_number = Kernel.gets().chomp()
-    if valid_number?(first_number)
-      break
-    else
-      prompt("not_valid_number")
-    end
+    break if valid_number?(first_number)
+    prompt("not_valid_number")
   end
 
   second_number = ""
   loop do
     prompt("second_number")
     second_number = Kernel.gets().chomp()
-    if valid_number?(second_number)
-      break
-    else
-      prompt("not_valid_number")
-    end
+    break if valid_number?(second_number)
+    prompt("not_valid_number")
   end
 
   operation = ""
   loop do
     prompt("operation_choice")
     operation = Kernel.gets().chomp()
-    if %w(a s m d).include?(operation)
-      break
-    else
-      prompt("valid_operator")
-    end
+    break if %w(a s m d).include?(operation)
+    prompt("valid_operator")
   end
 
   prompt("#{operation_to_message(operation)}")
@@ -107,10 +85,10 @@ loop do
            when "m"
              first_number.to_i() * second_number.to_i()
            when "d"
-             first_number.to_f().round(2) / second_number.to_f().round(2)
+             first_number.to_f() / second_number.to_f()
            end
 
-  Kernel.puts("The result is => #{result}") unless result.nil?
+  Kernel.puts result.to_f().round(2)
 
   prompt("another_calculation")
   answer = Kernel.gets().chomp()

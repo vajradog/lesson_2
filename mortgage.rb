@@ -53,11 +53,11 @@ loop do
   annual_interest_rate = apr.to_f() / 100
   monthly_interest_rate = annual_interest_rate / 12
 
-  l = loan_amount.to_f()
-  c = monthly_interest_rate.to_f()
-  n = loan_duration_in_months.to_i()
+  monthly_payment = loan_amount.to_f() *
+                    (monthly_interest_rate.to_f() / (1 -
+                    (1 + monthly_interest_rate.to_f())**-
+                    loan_duration_in_months.to_i().to_i()))
 
-  monthly_payment = l * (c / (1 - (1 + c)**-n.to_i()))
   Kernel.puts("Your monthly payment amount is #{monthly_payment.round(2)}")
 
   prompt(MESSAGES['another_calculation'])
